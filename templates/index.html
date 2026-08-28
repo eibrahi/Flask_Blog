@@ -8,9 +8,9 @@
 </head>
 <body>
     <h1>Welcome to My Flask Blog!</h1>
-
-    <a href="{{ url_for('add') }}"><button type="button">Neuer Post</button></a>
-
+    <div class="top-actions">
+    <a class="btn new-post-btn" href="{{ url_for('add') }}">➕ Neuer Post</a>
+    </div>
     {% for post in posts %}
     <div class="post">
         <h2>{{ post.title }}</h2>
@@ -19,13 +19,27 @@
 
         <p>{{ post.content }}</p>
 
-        <a href="{{ url_for('update', post_id=post.id) }}">
-        <button type="button">Update</button>
-        </a>
+        <div class="post-actions">
 
-        <form action="{{ url_for('delete', post_id=post.id) }}" method="post">
-        <button type="submit">Delete</button>
-        </form>
+            <a class="btn update-btn"
+               href="{{ url_for('update', post_id=post.id) }}">
+                ✏️ Update
+            </a>
+
+            <form action="{{ url_for('delete', post_id=post.id) }}" method="post">
+                <button class="btn delete-btn" type="submit">
+                    🗑️ Delete
+                </button>
+            </form>
+
+            <form action="{{ url_for('like', post_id=post.id) }}" method="post">
+                <button class="btn like-btn" type="submit">
+                    👍 {{ post.likes }}
+                </button>
+            </form>
+
+        </div>
+
     </div>
     {% endfor %}
 </body>

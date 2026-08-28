@@ -3,8 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
 blog_posts = [
-    {"id": 1, "author": "John Doe", "title": "First Post", "content": "This is my first post."},
-    {"id": 2, "author": "Jane Doe", "title": "Second Post", "content": "This is another post."}
+    {"id": 1, "author": "John Doe", "title": "First Post", "content": "This is my first post.", "likes": 0},
+    {"id": 2, "author": "Jane Doe", "title": "Second Post", "content": "This is another post.", "likes": 0}
     # More blog posts can go here...
 ]
 @app.route("/")
@@ -29,7 +29,8 @@ def add():
             "id": new_id,
             "author": new_author,
             "title": new_title,
-            "content": new_content
+            "content": new_content,
+            "likes": 0
         }
         blog_posts.append(new_post)
 
@@ -56,11 +57,22 @@ def update(post_id):
     if request.method == 'POST':
         for post in blog_posts:
             if post['id'] == post_id:
+                post['author'] = request.form['author']
                 post['title'] = request.form['title']
                 post['content'] = request.form['content']
                 return redirect(url_for('index'))
 
     return "Post not found", 404
+
+@app.route('/like/<int:post_id>', methods=['POST'])
+def like(post_id):
+    for post in blog_posts:
+        if post['id'] == post_id:
+            post['likes'] += 1
+            break
+
+    return redirect(url_for('index'))
+
 
 
 if __name__ == '__main__':
